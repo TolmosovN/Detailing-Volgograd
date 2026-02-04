@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Добро пожаловать!</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #1e293b;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      color: #ffffff;
+      font-size: 28px;
+    }
+    .content {
+      padding: 40px 30px;
+    }
+    .content p {
+      line-height: 1.6;
+      margin: 15px 0;
+      color: #cbd5e1;
+    }
+    .content h2 {
+      color: #ef4444;
+      font-size: 22px;
+      margin-top: 30px;
+    }
+    .button {
+      display: inline-block;
+      padding: 14px 30px;
+      background-color: #ef4444;
+      color: #ffffff !important;
+      text-decoration: none;
+      border-radius: 6px;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .button:hover {
+      background-color: #dc2626;
+    }
+    .features {
+      background-color: #0f172a;
+      padding: 20px;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+    .feature-item {
+      margin: 15px 0;
+      display: flex;
+      align-items: start;
+    }
+    .feature-icon {
+      color: #ef4444;
+      font-size: 20px;
+      margin-right: 10px;
+    }
+    .footer {
+      background-color: #0f172a;
+      padding: 20px;
+      text-align: center;
+      color: #64748b;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🚗 Добро пожаловать!</h1>
+    </div>
+    
+    <div class="content">
+      <p>Здравствуйте, <strong>{{name}}</strong>!</p>
+      
+      <p>Спасибо за регистрацию в <strong>Автомойке Детейлинг</strong>! Мы рады видеть вас в числе наших клиентов.</p>
+      
+      <h2>Что вы можете делать:</h2>
+      
+      <div class="features">
+        <div class="feature-item">
+          <span class="feature-icon">✨</span>
+          <div>
+            <strong>Записываться на услуги</strong> - выбирайте удобное время онлайн
+          </div>
+        </div>
+        
+        <div class="feature-item">
+          <span class="feature-icon">💳</span>
+          <div>
+            <strong>Оплачивать онлайн</strong> - быстро и безопасно
+          </div>
+        </div>
+        
+        <div class="feature-item">
+          <span class="feature-icon">📋</span>
+          <div>
+            <strong>Управлять записями</strong> - просматривайте историю в личном кабинете
+          </div>
+        </div>
+        
+        <div class="feature-item">
+          <span class="feature-icon">🔔</span>
+          <div>
+            <strong>Получать уведомления</strong> - напоминания о визитах по email
+          </div>
+        </div>
+      </div>
+      
+      <p style="text-align: center;">
+        <a href="{{loginUrl}}" class="button">Перейти в личный кабинет</a>
+      </p>
+      
+      <p>Если у вас есть вопросы - мы всегда готовы помочь!</p>
+      
+      <p style="margin-top: 30px; font-size: 14px; color: #64748b;">
+        С уважением,<br>
+        <strong style="color: #ef4444;">Команда Автомойки Детейлинг</strong>
+      </p>
+    </div>
+    
+    <div class="footer">
+      <p>Это автоматическое письмо, пожалуйста, не отвечайте на него.</p>
+      <p><a href="{{frontendUrl}}" style="color: #ef4444;">Посетить сайт</a></p>
+    </div>
+  </div>
+</body>
+</html>

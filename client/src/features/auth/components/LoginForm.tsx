@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { Button } from "@shared/ui/Button";
 import { Input } from "@shared/ui/Input";
 import { Card } from "@shared/ui/Card";
@@ -70,13 +71,15 @@ export const LoginForm = () => {
 
     try {
       await login(formData.email, formData.password);
+      // Показываем успешное уведомление
+      toast.success("✅ Вход выполнен успешно!");
       // Перенаправляем на профиль после успешного входа
       router.push("/profile");
     } catch (error: any) {
       console.error("Ошибка входа:", error);
-      setSubmitError(
-        error.message || "Неверный email или пароль. Попробуйте снова."
-      );
+      const errorMessage = error.message || "Неверный email или пароль. Попробуйте снова.";
+      setSubmitError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

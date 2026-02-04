@@ -34,6 +34,8 @@ model Service {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
+  @@index([isActive])
+  @@index([name])
   @@map("services")
 }
 
@@ -60,6 +62,11 @@ model Booking {
   @@index([userId])
   @@index([serviceId])
   @@index([date])
+  @@index([status])
+  @@index([email])
+  @@index([userId, status])
+  @@index([date, status])
+  @@index([createdAt])
   @@map("bookings")
 }
 
@@ -78,6 +85,9 @@ model Payment {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
+  @@index([status])
+  @@index([bookingId])
+  @@index([createdAt])
   @@map("payments")
 }
 

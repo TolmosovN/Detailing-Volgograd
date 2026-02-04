@@ -1,6 +1,7 @@
 import { Card } from "@shared/ui/Card";
 import { formatPrice } from "@shared/lib";
 import type { AdminStats } from "@shared/api/adminApi";
+import { StatsCardSkeleton } from "@shared/ui/Skeleton";
 
 type StatsCardsProps = {
   stats: AdminStats;
@@ -14,10 +15,8 @@ export const StatsCards = ({ stats, isLoading }: StatsCardsProps) => {
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[...Array(4)].map((_, i) => (
-          <Card key={i} className="animate-pulse">
-            <div className="h-16 bg-slate-700 rounded"></div>
-          </Card>
+        {[1, 2, 3, 4].map((i) => (
+          <StatsCardSkeleton key={i} />
         ))}
       </div>
     );

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { Button } from "@shared/ui/Button";
 import { Input } from "@shared/ui/Input";
 import { Card } from "@shared/ui/Card";
@@ -101,14 +102,16 @@ export const RegisterForm = () => {
         formData.name,
         formData.phone
       );
+      // Показываем успешное уведомление
+      toast.success("🎉 Добро пожаловать! Регистрация успешна");
       // Перенаправляем на профиль после успешной регистрации
       router.push("/profile");
     } catch (error: any) {
       console.error("Ошибка регистрации:", error);
-      setSubmitError(
-        error.message ||
-          "Не удалось зарегистрироваться. Возможно, пользователь с таким email или телефоном уже существует."
-      );
+      const errorMessage = error.message ||
+          "Не удалось зарегистрироваться. Возможно, пользователь с таким email или телефоном уже существует.";
+      setSubmitError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

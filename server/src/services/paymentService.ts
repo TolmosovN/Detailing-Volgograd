@@ -1,7 +1,7 @@
-import { PrismaClient, PaymentStatus, BookingStatus } from '@prisma/client';
+import { PaymentStatus, BookingStatus } from '@prisma/client';
+import { prisma } from '../config/database';
 import { paymentConfig, isMockMode } from '../config/payment';
-
-const prisma = new PrismaClient();
+import { emailService } from './emailService';
 
 /**
  * Тип данных для создания платежа
@@ -174,6 +174,28 @@ export class PaymentService {
       });
 
       console.log(`✅ Платеж ${paymentId} подтвержден. Запись ${payment.bookingId} автоматически подтверждена.`);
+
+      // Отправляем email об успешной оплате
+      const booking = await prisma.booking.findUnique({
+        where: { id: payment.bookingId },
+        include: {
+          service: true,
+          user: true,
+        },
+      });
+
+      if (booking && booking.user) {
+        emailService.sendPaymentSuccessEmail(booking.user.email, {
+          bookingId: booking.id,
+          clientName: booking.user.name,
+          serviceName: booking.service.name,
+          amount: payment.amount / 100, // конвертируем копейки в рубли
+          date: new Date(booking.date).toLocaleDateString('ru-RU'),
+          time: booking.time,
+        }).catch((error) => {
+          console.error('Failed to send payment success email:', error);
+        });
+      }
     }
   }
 

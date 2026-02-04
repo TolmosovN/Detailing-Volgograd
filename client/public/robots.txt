@@ -1,0 +1,10 @@
+# robots.txt для Detailing Volgograd
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /profile
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://yourdomain.com/sitemap.xml

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Напоминание о записи</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #1e293b;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      color: #ffffff;
+      font-size: 28px;
+    }
+    .content {
+      padding: 40px 30px;
+    }
+    .content p {
+      line-height: 1.6;
+      margin: 15px 0;
+      color: #cbd5e1;
+    }
+    .reminder-box {
+      background-color: #fef3c7;
+      color: #92400e;
+      padding: 25px;
+      border-radius: 6px;
+      margin: 20px 0;
+      text-align: center;
+      border-left: 4px solid #f59e0b;
+    }
+    .reminder-box .time {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 15px 0;
+      color: #d97706;
+    }
+    .booking-details {
+      background-color: #0f172a;
+      padding: 25px;
+      border-radius: 6px;
+      margin: 20px 0;
+      border-left: 4px solid #f59e0b;
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 12px 0;
+      padding: 8px 0;
+      border-bottom: 1px solid #334155;
+    }
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+    .detail-label {
+      color: #94a3b8;
+      font-weight: bold;
+    }
+    .detail-value {
+      color: #e2e8f0;
+      text-align: right;
+    }
+    .map-box {
+      background-color: #0f172a;
+      padding: 20px;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+    .button {
+      display: inline-block;
+      padding: 14px 30px;
+      background-color: #f59e0b;
+      color: #ffffff !important;
+      text-decoration: none;
+      border-radius: 6px;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .button:hover {
+      background-color: #d97706;
+    }
+    .footer {
+      background-color: #0f172a;
+      padding: 20px;
+      text-align: center;
+      color: #64748b;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🔔 Напоминание о записи!</h1>
+    </div>
+    
+    <div class="content">
+      <p>Здравствуйте, <strong>{{clientName}}</strong>!</p>
+      
+      <div class="reminder-box">
+        <div><strong>⏰ Завтра ваша запись!</strong></div>
+        <div class="time">{{time}}</div>
+        <div>{{date}}</div>
+      </div>
+      
+      <p>Напоминаем о вашем визите в автомойку:</p>
+      
+      <div class="booking-details">
+        <div class="detail-row">
+          <span class="detail-label">Запись:</span>
+          <span class="detail-value">№{{id}}</span>
+        </div>
+        
+        <div class="detail-row">
+          <span class="detail-label">Услуга:</span>
+          <span class="detail-value">{{serviceName}}</span>
+        </div>
+        
+        <div class="detail-row">
+          <span class="detail-label">Дата:</span>
+          <span class="detail-value">{{date}}</span>
+        </div>
+        
+        <div class="detail-row">
+          <span class="detail-label">Время:</span>
+          <span class="detail-value">{{time}}</span>
+        </div>
+      </div>
+      
+      <div class="map-box">
+        <p style="margin: 0; color: #94a3b8;"><strong>📍 Наш адрес:</strong></p>
+        <p style="margin: 10px 0 0 0; color: #e2e8f0; font-size: 16px;">{{address}}</p>
+      </div>
+      
+      <p><strong>Рекомендации:</strong></p>
+      <ul style="color: #cbd5e1; line-height: 1.8;">
+        <li>Приезжайте за 5-10 минут до назначенного времени</li>
+        <li>Возьмите с собой документы на автомобиль</li>
+        <li>Не забудьте ключи от машины</li>
+      </ul>
+      
+      <p style="background-color: #fef3c7; color: #92400e; padding: 15px; border-radius: 6px; border-left: 4px solid #f59e0b;">
+        <strong>⚠️ Не сможете приехать?</strong> Пожалуйста, предупредите нас заранее через личный кабинет или по телефону.
+      </p>
+      
+      <p style="text-align: center;">
+        <a href="{{profileUrl}}" class="button">Мои записи</a>
+      </p>
+      
+      <p style="margin-top: 30px; font-size: 14px; color: #64748b;">
+        До встречи завтра!<br>
+        <strong style="color: #f59e0b;">Команда Автомойки Детейлинг</strong>
+      </p>
+    </div>
+    
+    <div class="footer">
+      <p>Это автоматическое письмо, пожалуйста, не отвечайте на него.</p>
+      <p><a href="{{frontendUrl}}" style="color: #f59e0b;">Посетить сайт</a></p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
 import { body, validationResult } from 'express-validator';
-
-const prisma = new PrismaClient();
+import { prisma } from '../config/database';
+import { emailService } from '../services/emailService';
 
 /**
  * Правила валидации для создания записи
@@ -100,6 +99,18 @@ export const createBooking = async (req: Request, res: Response) => {
       });
 
       return { booking, payment };
+    });
+
+    // Отправляем email о создании записи (асинхронно)
+    emailService.sendBookingCreatedEmail(email, {
+      id: result.booking.id,
+      clientName: name,
+      serviceName: result.booking.service.name,
+      date: new Date(date).toLocaleDateString('ru-RU'),
+      time,
+      amount: result.booking.service.priceFrom,
+    }).catch((error) => {
+      console.error('Failed to send booking email:', error);
     });
 
     res.status(201).json({

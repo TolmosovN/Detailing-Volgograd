@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
 import { body, validationResult } from 'express-validator';
+import { prisma } from '../config/database';
 import { hashPassword, comparePassword } from '../utils/password';
 import { generateToken } from '../utils/jwt';
-
-const prisma = new PrismaClient();
+import { emailService } from '../services/emailService';
 
 /**
  * Правила валидации для регистрации
@@ -85,6 +84,11 @@ export const register = async (req: Request, res: Response) => {
       userId: user.id,
       email: user.email,
       role: user.role,
+    });
+
+    // Отправляем приветственное email (асинхронно, не блокируем ответ)
+    emailService.sendWelcomeEmail(user.email, user.name).catch((error) => {
+      console.error('Failed to send welcome email:', error);
     });
 
     // Возвращаем токен и данные пользователя (без пароля)

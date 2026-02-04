@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Запись создана</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #1e293b;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      color: #ffffff;
+      font-size: 28px;
+    }
+    .content {
+      padding: 40px 30px;
+    }
+    .content p {
+      line-height: 1.6;
+      margin: 15px 0;
+      color: #cbd5e1;
+    }
+    .booking-details {
+      background-color: #0f172a;
+      padding: 25px;
+      border-radius: 6px;
+      margin: 20px 0;
+      border-left: 4px solid #ef4444;
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 12px 0;
+      padding: 8px 0;
+      border-bottom: 1px solid #334155;
+    }
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+    .detail-label {
+      color: #94a3b8;
+      font-weight: bold;
+    }
+    .detail-value {
+      color: #e2e8f0;
+      text-align: right;
+    }
+    .amount {
+      font-size: 24px;
+      color: #ef4444;
+      font-weight: bold;
+    }
+    .button {
+      display: inline-block;
+      padding: 14px 30px;
+      background-color: #ef4444;
+      color: #ffffff !important;
+      text-decoration: none;
+      border-radius: 6px;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .button:hover {
+      background-color: #dc2626;
+    }
+    .alert {
+      background-color: #fef3c7;
+      color: #92400e;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 20px 0;
+      border-left: 4px solid #f59e0b;
+    }
+    .footer {
+      background-color: #0f172a;
+      padding: 20px;
+      text-align: center;
+      color: #64748b;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>✅ Запись создана!</h1>
+    </div>
+    
+    <div class="content">
+      <p>Здравствуйте, <strong>{{clientName}}</strong>!</p>
+      
+      <p>Ваша запись <strong>№{{id}}</strong> успешно создана!</p>
+      
+      <div class="booking-details">
+        <div class="detail-row">
+          <span class="detail-label">Услуга:</span>
+          <span class="detail-value">{{serviceName}}</span>
+        </div>
+        
+        <div class="detail-row">
+          <span class="detail-label">Дата:</span>
+          <span class="detail-value">{{date}}</span>
+        </div>
+        
+        <div class="detail-row">
+          <span class="detail-label">Время:</span>
+          <span class="detail-value">{{time}}</span>
+        </div>
+        
+        <div class="detail-row" style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #334155;">
+          <span class="detail-label">К оплате:</span>
+          <span class="detail-value amount">{{amount}} ₽</span>
+        </div>
+      </div>
+      
+      <div class="alert">
+        <strong>⚠️ Важно!</strong> Для подтверждения записи необходимо оплатить услугу.
+      </div>
+      
+      <p style="text-align: center;">
+        <a href="{{paymentUrl}}" class="button">Оплатить сейчас</a>
+      </p>
+      
+      <p>После оплаты ваша запись будет автоматически подтверждена. Вы получите уведомление на email.</p>
+      
+      <p>Также вы можете просмотреть запись в <a href="{{profileUrl}}" style="color: #ef4444;">личном кабинете</a>.</p>
+      
+      <p style="margin-top: 30px; font-size: 14px; color: #64748b;">
+        С уважением,<br>
+        <strong style="color: #ef4444;">Команда Автомойки Детейлинг</strong>
+      </p>
+    </div>
+    
+    <div class="footer">
+      <p>Это автоматическое письмо, пожалуйста, не отвечайте на него.</p>
+      <p><a href="{{frontendUrl}}" style="color: #ef4444;">Посетить сайт</a></p>
+    </div>
+  </div>
+</body>
+</html>

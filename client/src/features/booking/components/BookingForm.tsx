@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { Button } from "@shared/ui/Button";
 import { Input } from "@shared/ui/Input";
 import { Card } from "@shared/ui/Card";
@@ -195,6 +196,9 @@ export const BookingForm = () => {
 
       if (result.status === "success") {
         setSubmitStatus("success");
+        
+        // Показываем успешное уведомление
+        toast.success("✅ Запись создана! Переход к оплате...");
 
         // Получаем ID записи из ответа
         const bookingId = result.data?.booking?.id;
@@ -223,9 +227,11 @@ export const BookingForm = () => {
         }, 3000);
       } else {
         setSubmitStatus("error");
+        toast.error("Не удалось создать запись");
       }
-    } catch {
+    } catch (error: any) {
       setSubmitStatus("error");
+      toast.error(error.message || "Не удалось создать запись");
     } finally {
       setIsSubmitting(false);
     }

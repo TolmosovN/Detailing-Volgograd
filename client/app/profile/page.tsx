@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Container } from "@shared/ui/Container";
 import { Card } from "@shared/ui/Card";
@@ -8,12 +8,23 @@ import { Button } from "@shared/ui/Button";
 import { useAuth } from "@features/auth/context/AuthContext";
 import { usersApi, type UserBooking } from "@shared/api/usersApi";
 import { formatPrice } from "@shared/lib";
+import { BookingCardSkeleton } from "@shared/ui/Skeleton";
+import { Modal } from "@shared/ui/Modal";
+import { BookingsFilter } from "@features/profile/components/BookingsFilter";
+import { AnimatedListItem } from "@shared/ui/AnimatedList";
+import { EmptyState } from "@shared/ui/EmptyState";
 
 export default function ProfilePage() {
   const router = useRouter();
   const { user, logout, isLoading } = useAuth();
   const [bookings, setBookings] = useState<UserBooking[]>([]);
   const [loadingBookings, setLoadingBookings] = useState(true);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  
+  // Состояния для фильтрации и поиска
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"ALL" | "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED">("ALL");
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
 
   // Перенаправляем на login если не авторизован
   useEffect(() => {
@@ -45,7 +56,34 @@ export default function ProfilePage() {
   const handleLogout = () => {
     logout();
     router.push("/");
+    setIsLogoutModalOpen(false);
   };
+
+  // Фильтрация и сортировка записей
+  const filteredAndSortedBookings = useMemo(() => {
+    let result = [...bookings];
+
+    // Поиск по названию услуги
+    if (searchQuery) {
+      result = result.filter((booking) =>
+        booking.service.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Фильтр по статусу
+    if (statusFilter !== "ALL") {
+      result = result.filter((booking) => booking.status === statusFilter);
+    }
+
+    // Сортировка по дате
+    result.sort((a, b) => {
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+    });
+
+    return result;
+  }, [bookings, searchQuery, statusFilter, sortOrder]);
 
   if (isLoading) {
     return (
@@ -76,7 +114,7 @@ export default function ProfilePage() {
         <Card>
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-2xl font-bold">Личный кабинет</h1>
-            <Button onClick={handleLogout} variant="outline">
+            <Button onClick={() => setIsLogoutModalOpen(true)} variant="outline">
               Выйти
             </Button>
           </div>
@@ -102,26 +140,48 @@ export default function ProfilePage() {
           <h2 className="text-xl font-bold mb-4">Мои записи</h2>
 
           {loadingBookings ? (
-            <div className="text-center text-slate-400 py-8">
-              Загрузка записей...
+            <div className="space-y-4">
+              {[1, 2, 3].map((i) => (
+                <BookingCardSkeleton key={i} />
+              ))}
             </div>
           ) : bookings.length === 0 ? (
-            <Card>
-              <p className="text-center text-slate-400 py-8">
-                У вас пока нет записей
-              </p>
-              <div className="text-center mt-4">
-                <Button onClick={() => router.push("/booking")}>
-                  Записаться на мойку
-                </Button>
-              </div>
-            </Card>
+            <EmptyState
+              icon="📅"
+              title="У вас пока нет записей"
+              description="Запишитесь на услугу автомойки, и все ваши записи будут отображаться здесь."
+              action={{
+                label: "Записаться на мойку",
+                onClick: () => router.push("/booking"),
+              }}
+            />
           ) : (
-            <div className="space-y-4">
-              {bookings.map((booking) => {
+            <>
+              {/* Фильтры и поиск */}
+              <BookingsFilter
+                onSearchChange={setSearchQuery}
+                onStatusChange={setStatusFilter}
+                onSortChange={setSortOrder}
+                totalCount={bookings.length}
+                filteredCount={filteredAndSortedBookings.length}
+              />
+
+              {/* Результаты */}
+              {filteredAndSortedBookings.length === 0 ? (
+                <div className="mt-4">
+                  <EmptyState
+                    icon="🔍"
+                    title="Ничего не найдено"
+                    description="Попробуйте изменить фильтры или очистить поиск."
+                  />
+                </div>
+              ) : (
+                <div className="space-y-4 mt-4">
+                  {filteredAndSortedBookings.map((booking, index) => {
                 const statusInfo = getStatusLabel(booking.status);
                 return (
-                  <Card key={booking.id}>
+                  <AnimatedListItem key={booking.id} index={index}>
+                    <Card>
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <h3 className="font-semibold text-lg mb-2">
@@ -163,13 +223,29 @@ export default function ProfilePage() {
                         </span>
                       </div>
                     </div>
-                  </Card>
+                    </Card>
+                  </AnimatedListItem>
                 );
               })}
-            </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
+
+      {/* Модальное окно выхода */}
+      <Modal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        title="🚪 Выйти из аккаунта?"
+        onConfirm={handleLogout}
+        confirmText="Выйти"
+        cancelText="Отмена"
+        confirmVariant="danger"
+      >
+        <p>Вы уверены, что хотите выйти из личного кабинета?</p>
+      </Modal>
     </Container>
   );
 }

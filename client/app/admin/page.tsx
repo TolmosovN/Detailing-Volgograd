@@ -8,6 +8,7 @@ import { useAuth } from "@features/auth/context/AuthContext";
 import { StatsCards } from "@features/admin/components/StatsCards";
 import { BookingsTable } from "@features/admin/components/BookingsTable";
 import { adminApi, type AdminStats, type AdminBooking } from "@shared/api/adminApi";
+import { TableRowSkeleton } from "@shared/ui/Skeleton";
 
 export default function AdminPage() {
   const router = useRouter();
@@ -171,8 +172,24 @@ export default function AdminPage() {
           </div>
 
           {isLoadingBookings ? (
-            <div className="text-center text-slate-400 py-8">
-              Загрузка записей...
+            <div className="bg-slate-800/50 rounded-lg border border-slate-700 overflow-hidden">
+              <table className="w-full">
+                <thead className="bg-slate-900/50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-400">ID</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-400">Клиент</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-400">Услуга</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-400">Дата/Время</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-400">Статус</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-400">Действия</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <TableRowSkeleton key={i} />
+                  ))}
+                </tbody>
+              </table>
             </div>
           ) : (
             <BookingsTable bookings={bookings} onUpdate={loadBookings} />

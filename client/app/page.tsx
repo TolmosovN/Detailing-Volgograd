@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { ServicesList } from "@features/services/components/ServicesList";
 import { Button } from "@shared/ui/Button";
 import { Container } from "@shared/ui/Container";
 import { APP_CONFIG } from "@shared/config";
+import { ServiceCardSkeleton } from "@shared/ui/Skeleton";
 
 export default function HomePage() {
   return (
@@ -31,7 +33,15 @@ export default function HomePage() {
         <h2 className="text-xl font-semibold">
           Популярные услуги
         </h2>
-        <ServicesList />
+        <Suspense fallback={
+          <div className="grid gap-4 sm:grid-cols-3">
+            {[1, 2, 3].map((i) => (
+              <ServiceCardSkeleton key={i} />
+            ))}
+          </div>
+        }>
+          <ServicesList />
+        </Suspense>
       </section>
 
       {/* Блок "О нас" */}

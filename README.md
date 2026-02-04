@@ -13,9 +13,21 @@
 
 ## 📚 Документация
 
+### Установка и разработка:
 - **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** - Подробная инструкция по установке и запуску
 - **[client/README.md](./client/README.md)** - Документация фронтенда
 - **[server/README.md](./server/README.md)** - Документация бэкенда
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Архитектура приложения
+
+### Деплой и продакшен:
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Руководство по деплою на VPS/PaaS
+- **[SECURITY.md](./SECURITY.md)** - Меры безопасности и чеклист
+- **[PAYMENT_SETUP.md](./PAYMENT_SETUP.md)** - Настройка платежной системы Yookassa
+
+### Этапы разработки:
+- **[STAGE9_COMPLETED.md](./STAGE9_COMPLETED.md)** - Уведомления и UI/UX улучшения
+- **[UI_IMPROVEMENTS_COMPLETE.md](./UI_IMPROVEMENTS_COMPLETE.md)** - Детали UI улучшений
+- **[STAGE10_PLAN.md](./STAGE10_PLAN.md)** - Финальная подготовка к деплою
 
 ## ⚡ Быстрый старт
 
@@ -90,36 +102,77 @@ Detailing-Volgograd/
 - **express-validator** - Валидация
 - **TypeScript** - Типизация
 
-### Будущие интеграции
-- Платежи: Stripe / ЮKassa / CloudPayments
-- Карты: Google Maps / Яндекс.Карты
-- Уведомления: Email (SMTP) / SMS
+### Дополнительные технологии
+- **React Hot Toast** - Toast уведомления
+- **Framer Motion** - Анимации
+- **React Loading Skeleton** - Loading states
+- **Winston** - Логирование
+- **Helmet** - Безопасность HTTP заголовков
+- **Express Rate Limit** - Защита от DDoS
+
+### Интеграции
+- **Платежи**: Yookassa (mock режим для разработки)
+- **Email**: Nodemailer + Handlebars (mock режим для разработки)
+- **Карты**: Готово к интеграции Google Maps / Яндекс.Карты
 
 ## 📊 API Endpoints
 
-### Services
-- `GET /api/services` - Список услуг
+### Авторизация
+- `POST /api/auth/register` - Регистрация пользователя
+- `POST /api/auth/login` - Вход в систему
+
+### Services (Услуги)
+- `GET /api/services` - Список активных услуг
 - `GET /api/services/:id` - Услуга по ID
 
-### Bookings
-- `POST /api/bookings` - Создать запись
+### Bookings (Записи)
+- `POST /api/bookings` - Создать запись (с платежом)
 - `GET /api/bookings` - Список записей
 
-### Health
-- `GET /api/health` - Статус сервера
+### Users (Пользователи)
+- `GET /api/users/me` - Текущий пользователь
+- `GET /api/users/me/bookings` - Записи пользователя
+
+### Admin (Админ-панель)
+- `GET /api/admin/stats` - Статистика
+- `GET /api/admin/bookings` - Все записи с фильтрами
+- `PATCH /api/admin/bookings/:id/status` - Изменить статус записи
+- `POST /api/admin/services` - Создать услугу
+- `PUT /api/admin/services/:id` - Обновить услугу
+- `DELETE /api/admin/services/:id` - Деактивировать услугу
+
+### Payments (Платежи)
+- `POST /api/payments/create` - Создать платеж
+- `GET /api/payments/:id` - Получить платеж
+- `GET /api/payments/booking/:bookingId` - Платеж по записи
+- `POST /api/payments/:id/confirm` - Подтвердить платеж (тест)
+- `POST /api/payments/webhook` - Webhook от платежной системы
+
+### Health & Monitoring
+- `GET /api/health` - Полный health check
+- `GET /api/health/ready` - Readiness probe
+- `GET /api/health/live` - Liveness probe
 
 ## 🎯 Этапы разработки
 
-- ✅ **Этап 1**: Инициализация проекта, настройка структуры
-- ✅ **Этап 2**: Разработка UI компонентов (Header, Footer, Cards)
-- ✅ **Этап 3**: Главная страница с витриной услуг
-- ✅ **Этап 4**: Страница записи с формой и валидацией
+- ✅ **Этап 1-4**: Инициализация, UI компоненты, главная, форма записи
 - ✅ **Этап 5**: Подключение реального API (Express + Prisma + MySQL)
-- 🔄 **Этап 6**: Авторизация и личный кабинет
-- 🔄 **Этап 7**: Админ-панель для управления записями
-- 🔄 **Этап 8**: Интеграция платежных систем
-- 🔄 **Этап 9**: Карта и контактная информация
-- 🔄 **Этап 10**: Оптимизация и деплой
+- ✅ **Этап 6**: Авторизация и личный кабинет (JWT, роли)
+- ✅ **Этап 7**: Админ-панель для управления записями
+- ✅ **Этап 8**: Интеграция платежных систем (Yookassa mock)
+- ✅ **Этап 9**: Email уведомления + UI/UX улучшения
+  - Loading Skeletons
+  - Модальные окна
+  - Поиск и фильтры
+  - Анимации (Framer Motion)
+  - Toast notifications
+- ✅ **Этап 10**: Финальная подготовка
+  - Оптимизация производительности
+  - SEO настройки (метатеги, sitemap, robots.txt)
+  - Безопасность (Helmet, Rate limiting, Graceful shutdown)
+  - Мониторинг и логирование (Winston)
+  - Документация деплоя
+- 🚀 **Этап 11**: Деплой (следующий шаг)
 
 ## 👨‍💻 Для разработчиков
 
@@ -142,11 +195,29 @@ npm run seed             # Заполнить БД тестовыми данны
 **Проверка:**
 ```bash
 # Health check
-curl http://localhost:3001/api/health
+curl http://localhost:5000/api/health
 
 # Получить услуги
-curl http://localhost:3001/api/services
+curl http://localhost:5000/api/services
+
+# Тестовые пользователи (после seed):
+# Админ: admin@detailing.ru / admin123
+# Клиент: test@example.com / test123
 ```
+
+## 🔐 Безопасность
+
+Приложение включает:
+- ✅ JWT аутентификация
+- ✅ Bcrypt хеширование паролей
+- ✅ Helmet для HTTP заголовков
+- ✅ Rate limiting (защита от DDoS)
+- ✅ CORS настройки
+- ✅ Валидация всех входных данных
+- ✅ XSS защита
+- ✅ SQL injection защита (Prisma)
+
+См. [SECURITY.md](./SECURITY.md) для деталей.
 
 ## 📝 Дополнительные правила проекта
 

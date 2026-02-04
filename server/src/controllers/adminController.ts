@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
-import { PrismaClient, BookingStatus } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { BookingStatus } from '@prisma/client';
+import { prisma } from '../config/database';
+import { emailService } from '../services/emailService';
 
 /**
  * Получить статистику для админ-панели
@@ -232,6 +232,27 @@ export const updateBookingStatus = async (
         user: true,
       },
     });
+
+    // Отправляем email при изменении статуса
+    if (updatedBooking.user) {
+      const bookingData = {
+        id: updatedBooking.id,
+        clientName: updatedBooking.user.name,
+        serviceName: updatedBooking.service.name,
+        date: new Date(updatedBooking.date).toLocaleDateString('ru-RU'),
+        time: updatedBooking.time,
+      };
+
+      if (status === 'CONFIRMED') {
+        emailService.sendBookingConfirmedEmail(updatedBooking.user.email, bookingData).catch((error) => {
+          console.error('Failed to send confirmed email:', error);
+        });
+      } else if (status === 'CANCELLED') {
+        emailService.sendBookingCancelledEmail(updatedBooking.user.email, bookingData).catch((error) => {
+          console.error('Failed to send cancelled email:', error);
+        });
+      }
+    }
 
     res.json({
       status: 'success',
